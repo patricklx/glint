@@ -1,4 +1,4 @@
-import { existsSync, statSync } from 'fs';
+import { existsSync, statSync, readFileSync } from 'fs';
 
 import { stripIndent } from 'common-tags';
 import { beforeEach, describe, expect, test } from 'vitest';
@@ -38,7 +38,11 @@ describe('CLI: --incremental', () => {
     expect(checkResult.exitCode).toBe(0);
     expect(checkResult.stdout).toEqual('');
     expect(checkResult.stderr).toEqual('');
-    expect(existsSync(project.filePath(BUILD_INFO))).toBe(true);
+
+    // The build file should not only exist, it should not be *empty*.
+    let buildInfo = project.filePath(BUILD_INFO);
+    expect(existsSync(buildInfo)).toBe(true);
+    expect(readFileSync(buildInfo, { encoding: 'utf-8' })).not.toEqual('');
   });
 
   describe('when a build has occurred', () => {
