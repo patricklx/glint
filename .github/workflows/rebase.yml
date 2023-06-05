@@ -1,30 +1,31 @@
-name: CI
+name: Rebase
 
 # These trigger patterns courtesy of https://github.com/broccolijs/broccoli/pull/436
 on:
-  pull_request:
-  push:
-    # filtering branches here prevents duplicate builds from pull_request and push
-    branches:
-      - main
-    # always run CI for tags
-    tags:
-      - '*'
-
   # early issue detection: run CI weekly on Sundays
   schedule:
-    - cron: '0 6 * * 0'
+    - cron: '0 0 * * *'
 
 env:
   CI: true
 
 jobs:
-  test:
-    name: Test
+  rebase:
+    name: Rebase
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          token: ${{ github.token }}
+      - name: rebase on original
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git fetch --unshallow
+          git remote add orig https://github.com/typed-ember/glint.git          
+          git fetch --all
+          git pull orig main --rebase
       - name: Install Node
         uses: actions/setup-node@v3
         with:
@@ -48,20 +49,8 @@ jobs:
         uses: coactions/setup-xvfb@v1
         with:
           run: yarn test
-      - name: pack
-        run: cd packages/core && yarn pack
-      - name: version
-        id: version
-        run: echo "version=$(cd packages/core && cat package.json | jq -r '.version')" >> "$GITHUB_OUTPUT"
-      - name: release
-        uses: softprops/action-gh-release@v1
-        id: create_release
-        with:
-          fail_on_unmatched_files: true
-          name: v${{ steps.version.outputs.version }}
-          tag_name: v${{ steps.version.outputs.version }}
-          body_path: CHANGELOG.md
-          files: |
-            packages/core/glint-core-v${{ steps.version.outputs.version }}.tgz
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: push
+        run: |
+          git push origin main --force
+        
+        
