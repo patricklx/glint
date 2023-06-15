@@ -61,6 +61,6 @@ jobs:
           tag_name: v${{ steps.version.outputs.version }}
           body_path: CHANGELOG.md
           files: |
-            glint-core-v${{ steps.version.outputs.version }}.tgz
+            glint-core-${{ steps.version.outputs.version }}.tgz
         env:
           GITHUB_TOKEN: ${{ github.token }}
