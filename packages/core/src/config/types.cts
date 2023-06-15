@@ -1,4 +1,5 @@
 import type * as ts from 'typescript';
+import { AST } from '@glimmer/syntax';
 
 // This file is explicitly `.cts` so that environment packages written
 // in CJS can import its types from `@glint/core/config-types`.
@@ -96,6 +97,12 @@ export type PathCandidateWithDeferral = {
 };
 
 export type GlintTemplateConfig = {
+  preprocess?: (
+    templateInfo: { contents: string; filename: string },
+    args: { globals?: string[]; preamble?: string[] }
+  ) => { globals: string[]; preamble: string[]; template: string };
+  postprocessAst?: (ast: AST.Template) => AST.Template;
+  mapTemplateContent?: Record<string, any>;
   typesModule: string;
   specialForms?: { [global: string]: GlintSpecialForm };
   getPossibleTemplatePaths(scriptPath: string): Array<PathCandidate>;
