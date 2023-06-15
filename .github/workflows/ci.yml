@@ -50,11 +50,16 @@ jobs:
           run: yarn test
       - name: pack
         run: yarn pack
+      - name: version
+        id: version
+        run: echo "version=$(cat package.json | jq -r '.version')" >> "$GITHUB_OUTPUT"
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         id: create_release
         with:
+          name: v${{ steps.version.outputs.version }}
+          tag_name: v${{ steps.version.outputs.version }}
           body_path: CHANGELOG.md
           files: |
             package.tar.gz
