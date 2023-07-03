@@ -53,6 +53,11 @@ jobs:
       - name: version
         id: version
         run: echo "version=$(cd packages/core && cat package.json | jq -r '.version')" >> "$GITHUB_OUTPUT"
+      - name: create tag
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ github.token }}
+          custom_tag: v${{steps.version.outputs.version}}
       - name: release
         uses: softprops/action-gh-release@v1
         id: create_release
