@@ -59,14 +59,10 @@ jobs:
           github_token: ${{ github.token }}
           custom_tag: ${{steps.version.outputs.version}}
       - name: release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         id: create_release
         with:
-          fail_on_unmatched_files: true
           name: v${{ steps.version.outputs.version }}
-          tag_name: v${{ steps.version.outputs.version }}
-          body_path: CHANGELOG.md
-          files: |
-            packages/core/glint-core-v${{ steps.version.outputs.version }}.tgz
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+          tag: v${{ steps.version.outputs.version }}
+          bodyFile: CHANGELOG.md
+          artifacts: packages/core/glint-core-v${{ steps.version.outputs.version }}.tgz
