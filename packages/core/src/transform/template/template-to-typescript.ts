@@ -24,17 +24,17 @@ export type TemplateToTypescriptOptions = {
  * the original and transformed contents.
  */
 export function templateToTypescript(
-  originalTemplate: string,
-  {
-    typesModule,
-    globals,
-    meta,
-    backingValue,
-    preamble = [],
-    embeddingSyntax = { prefix: '', suffix: '' },
-    specialForms = {},
-    useJsDoc = false,
-  }: TemplateToTypescriptOptions
+    originalTemplate: string,
+    {
+      typesModule,
+      globals,
+      meta,
+      backingValue,
+      preamble = [],
+      embeddingSyntax = { prefix: '', suffix: '' },
+      specialForms = {},
+      useJsDoc = false,
+    }: TemplateToTypescriptOptions
 ): RewriteResult {
   let { prefix, suffix } = embeddingSyntax;
   let template = `${''.padEnd(prefix.length)}${originalTemplate}${''.padEnd(suffix.length)}`;
@@ -171,9 +171,9 @@ export function templateToTypescript(
     }
 
     function emitSpecialFormExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression,
-      position: InvokePosition
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression,
+        position: InvokePosition
     ): void {
       if (formInfo.requiresConsumption) {
         emit.text('(χ.noop(');
@@ -231,23 +231,23 @@ export function templateToTypescript(
     }
 
     function emitBindInvokableExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression,
-      position: InvokePosition
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression,
+        position: InvokePosition
     ): void {
       emit.forNode(node, () => {
         assert(
-          node.params.length >= 1,
-          () => `{{${formInfo.name}}} requires at least one positional argument`
+            node.params.length >= 1,
+            () => `{{${formInfo.name}}} requires at least one positional argument`
         );
 
         assert(
-          node.params.length === 1 || node.hash.pairs.length === 0,
-          () =>
-            `Due to TypeScript inference limitations, {{${formInfo.name}}} can only pre-bind ` +
-            `either named or positional arguments in a single pass. You can instead break the ` +
-            `binding into two parts, e.g. ` +
-            `{{${formInfo.name} (${formInfo.name} ... posA posB) namedA=true namedB=true}}`
+            node.params.length === 1 || node.hash.pairs.length === 0,
+            () =>
+                `Due to TypeScript inference limitations, {{${formInfo.name}}} can only pre-bind ` +
+                `either named or positional arguments in a single pass. You can instead break the ` +
+                `binding into two parts, e.g. ` +
+                `{{${formInfo.name} (${formInfo.name} ... posA posB) namedA=true namedB=true}}`
         );
 
         if (position === 'top-level') {
@@ -277,13 +277,13 @@ export function templateToTypescript(
     }
 
     function emitObjectExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression
     ): void {
       emit.forNode(node, () => {
         assert(
-          node.params.length === 0,
-          () => `{{${formInfo.name}}} only accepts named parameters`
+            node.params.length === 0,
+            () => `{{${formInfo.name}}} only accepts named parameters`
         );
 
         if (!node.hash.pairs.length) {
@@ -311,13 +311,13 @@ export function templateToTypescript(
     }
 
     function emitArrayExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression
     ): void {
       emit.forNode(node, () => {
         assert(
-          node.hash.pairs.length === 0,
-          () => `{{${formInfo.name}}} only accepts positional parameters`
+            node.hash.pairs.length === 0,
+            () => `{{${formInfo.name}}} only accepts positional parameters`
         );
 
         emit.text('[');
@@ -335,13 +335,13 @@ export function templateToTypescript(
     }
 
     function emitIfExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression
     ): void {
       emit.forNode(node, () => {
         assert(
-          node.params.length >= 2,
-          () => `{{${formInfo.name}}} requires at least two parameters`
+            node.params.length >= 2,
+            () => `{{${formInfo.name}}} requires at least two parameters`
         );
 
         emit.text('(');
@@ -361,13 +361,13 @@ export function templateToTypescript(
     }
 
     function emitIfNotExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression
     ): void {
       emit.forNode(node, () => {
         assert(
-          node.params.length >= 2,
-          () => `{{${formInfo.name}}} requires at least two parameters`
+            node.params.length >= 2,
+            () => `{{${formInfo.name}}} requires at least two parameters`
         );
 
         emit.text('!(');
@@ -387,17 +387,17 @@ export function templateToTypescript(
     }
 
     function emitBinaryOperatorExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression
     ): void {
       emit.forNode(node, () => {
         assert(
-          node.hash.pairs.length === 0,
-          () => `{{${formInfo.name}}} only accepts positional parameters`
+            node.hash.pairs.length === 0,
+            () => `{{${formInfo.name}}} only accepts positional parameters`
         );
         assert(
-          node.params.length === 2,
-          () => `{{${formInfo.name}}} requires exactly two parameters`
+            node.params.length === 2,
+            () => `{{${formInfo.name}}} requires exactly two parameters`
         );
 
         const [left, right] = node.params;
@@ -411,17 +411,17 @@ export function templateToTypescript(
     }
 
     function emitLogicalExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression
     ): void {
       emit.forNode(node, () => {
         assert(
-          node.hash.pairs.length === 0,
-          () => `{{${formInfo.name}}} only accepts positional parameters`
+            node.hash.pairs.length === 0,
+            () => `{{${formInfo.name}}} only accepts positional parameters`
         );
         assert(
-          node.params.length >= 2,
-          () => `{{${formInfo.name}}} requires at least two parameters`
+            node.params.length >= 2,
+            () => `{{${formInfo.name}}} requires at least two parameters`
         );
 
         emit.text('(');
@@ -437,17 +437,17 @@ export function templateToTypescript(
     }
 
     function emitUnaryOperatorExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression
     ): void {
       emit.forNode(node, () => {
         assert(
-          node.hash.pairs.length === 0,
-          () => `{{${formInfo.name}}} only accepts positional parameters`
+            node.hash.pairs.length === 0,
+            () => `{{${formInfo.name}}} only accepts positional parameters`
         );
         assert(
-          node.params.length === 1,
-          () => `{{${formInfo.name}}} requires exactly one parameter`
+            node.params.length === 1,
+            () => `{{${formInfo.name}}} requires exactly one parameter`
         );
 
         const [param] = node.params;
@@ -465,9 +465,9 @@ export function templateToTypescript(
 
     function checkSpecialForm(node: AST.CallNode): SpecialFormInfo | null {
       if (
-        node.path.type === 'PathExpression' &&
-        node.path.head.type === 'VarHead' &&
-        !node.path.tail.length
+          node.path.type === 'PathExpression' &&
+          node.path.head.type === 'VarHead' &&
+          !node.path.tail.length
       ) {
         let name = node.path.head.name;
         if (typeof specialForms[name] === 'string' && !scope.hasBinding(name)) {
@@ -504,9 +504,9 @@ export function templateToTypescript(
     function emitElementNode(node: AST.ElementNode): void {
       let firstCharacter = node.tag.charAt(0);
       if (
-        firstCharacter.toUpperCase() === firstCharacter ||
-        node.tag.includes('.') ||
-        scope.hasBinding(node.tag)
+          firstCharacter.toUpperCase() === firstCharacter ||
+          node.tag.includes('.') ||
+          scope.hasBinding(node.tag)
       ) {
         emitComponent(node);
       } else {
@@ -595,13 +595,15 @@ export function templateToTypescript(
         emit.indent();
 
         emit.text('const 𝛄 = χ.emitComponent(χ.resolve(');
-        emitPathContents(path, start, kind);
+        emit.forNode(node.nameNode, () => {
+          emitPathContents(path, start, kind);
+        })
         emit.text(')(');
 
         let dataAttrs = node.attributes.filter(({ name }) => name.startsWith('@'));
-        if (dataAttrs.length) {
-          emit.text('{ ');
+        emit.text('{ ');
 
+        emit.forNode(node.startTag, () => {
           for (let attr of dataAttrs) {
             emit.forNode(attr, () => {
               start = template.indexOf(attr.name, start + 1);
@@ -626,9 +628,11 @@ export function templateToTypescript(
             start = rangeForNode(attr.value).end;
             emit.text(', ');
           }
+          // in case there are no attributes, this would allow completions to trigger
+          emit.text(' ');
+        })
 
-          emit.text('...χ.NamedArgsMarker }');
-        }
+        emit.text('...χ.NamedArgsMarker }');
 
         emit.text('));');
         emit.newline();
@@ -650,23 +654,23 @@ export function templateToTypescript(
               let name = child.tag.slice(1);
 
               emit.forNode(child, () =>
-                emitBlockContents(
-                  name,
-                  nameStart,
-                  child.blockParams,
-                  blockParamsStart,
-                  child.children
-                )
+                  emitBlockContents(
+                      name,
+                      nameStart,
+                      child.blockParams,
+                      blockParamsStart,
+                      child.children
+                  )
               );
             }
           } else {
             let blockParamsStart = template.indexOf('|', rangeForNode(node).start);
             emitBlockContents(
-              'default',
-              undefined,
-              node.blockParams,
-              blockParamsStart,
-              blocks.children
+                'default',
+                undefined,
+                node.blockParams,
+                blockParamsStart,
+                blocks.children
             );
           }
 
@@ -685,9 +689,9 @@ export function templateToTypescript(
 
     function isAllowedAmongNamedBlocks(node: AST.Node): boolean {
       return (
-        (node.type === 'TextNode' && node.chars.trim() === '') ||
-        node.type === 'CommentStatement' ||
-        node.type === 'MustacheCommentStatement'
+          (node.type === 'TextNode' && node.chars.trim() === '') ||
+          node.type === 'CommentStatement' ||
+          node.type === 'MustacheCommentStatement'
       );
     }
 
@@ -697,8 +701,8 @@ export function templateToTypescript(
 
     type NamedBlockChild = AST.ElementNode | AST.CommentStatement | AST.MustacheCommentStatement;
     type BlockChildren =
-      | { type: 'named'; children: NamedBlockChild[] }
-      | { type: 'default'; children: AST.TopLevelStatement[] };
+        | { type: 'named'; children: NamedBlockChild[] }
+        | { type: 'default'; children: AST.TopLevelStatement[] };
 
     function determineBlockChildren(node: AST.ElementNode): BlockChildren {
       let named = 0;
@@ -722,11 +726,11 @@ export function templateToTypescript(
         return {
           type: 'named',
           children: node.children.filter(
-            // Filter out ignorable content between named blocks
-            (child): child is NamedBlockChild =>
-              child.type === 'ElementNode' ||
-              child.type === 'CommentStatement' ||
-              child.type === 'MustacheCommentStatement'
+              // Filter out ignorable content between named blocks
+              (child): child is NamedBlockChild =>
+                  child.type === 'ElementNode' ||
+                  child.type === 'CommentStatement' ||
+                  child.type === 'MustacheCommentStatement'
           ),
         };
       } else {
@@ -736,10 +740,10 @@ export function templateToTypescript(
         for (let child of node.children) {
           if (!isNamedBlock(child)) {
             emit.forNode(child, () =>
-              assert(
-                isAllowedAmongNamedBlocks(child),
-                'Named blocks may not be mixed with other content'
-              )
+                assert(
+                    isAllowedAmongNamedBlocks(child),
+                    'Named blocks may not be mixed with other content'
+                )
             );
           }
         }
@@ -792,7 +796,7 @@ export function templateToTypescript(
 
     function emitPlainAttributes(node: AST.ElementNode): void {
       let attributes = node.attributes.filter(
-        (attr) => !attr.name.startsWith('@') && attr.name !== SPLATTRIBUTES
+          (attr) => !attr.name.startsWith('@') && attr.name !== SPLATTRIBUTES
       );
 
       emit.text('χ.applyAttributes(𝛄.element, {');
@@ -821,7 +825,8 @@ export function templateToTypescript(
             emit.newline();
           });
         }
-
+        // in case there are no attributes, this would allow completions to trigger
+        emit.text(' ');
         emit.dedent();
       });
       emit.text('});');
@@ -833,8 +838,8 @@ export function templateToTypescript(
       if (!splattributes) return;
 
       assert(
-        splattributes.value.type === 'TextNode' && splattributes.value.chars === '',
-        '`...attributes` cannot accept a value'
+          splattributes.value.type === 'TextNode' && splattributes.value.chars === '',
+          '`...attributes` cannot accept a value'
       );
 
       emit.forNode(splattributes, () => {
@@ -866,8 +871,8 @@ export function templateToTypescript(
         // This assertion is currently meaningless, as @glimmer/syntax silently drops
         // any named or positional parameters passed in a literal mustache
         assert(
-          node.params.length === 0 && node.hash.pairs.length === 0,
-          'Literals do not accept params'
+            node.params.length === 0 && node.hash.pairs.length === 0,
+            'Literals do not accept params'
         );
 
         emitLiteral(node.path);
@@ -894,7 +899,7 @@ export function templateToTypescript(
 
     function isGlobal(path: AST.Expression): boolean {
       return Boolean(
-        path.type === 'PathExpression' &&
+          path.type === 'PathExpression' &&
           path.head.type === 'VarHead' &&
           globals?.includes(path.head.name) &&
           !scope.hasBinding(path.head.name)
@@ -902,22 +907,22 @@ export function templateToTypescript(
     }
 
     function emitYieldExpression(
-      formInfo: SpecialFormInfo,
-      node: AST.MustacheStatement | AST.SubExpression,
-      position: InvokePosition
+        formInfo: SpecialFormInfo,
+        node: AST.MustacheStatement | AST.SubExpression,
+        position: InvokePosition
     ): void {
       emit.forNode(node, () => {
         assert(
-          position === 'top-level',
-          () => `{{${formInfo.name}}} may only appear as a top-level statement`
+            position === 'top-level',
+            () => `{{${formInfo.name}}} may only appear as a top-level statement`
         );
 
         let to = 'default';
         let toPair = node.hash.pairs.find((pair) => pair.key === 'to');
         if (toPair) {
           assert(
-            toPair.value.type === 'StringLiteral',
-            () => `Named block {{${formInfo.name}}}s must have a literal block name`
+              toPair.value.type === 'StringLiteral',
+              () => `Named block {{${formInfo.name}}}s must have a literal block name`
           );
           to = toPair.value.value;
         }
@@ -960,10 +965,10 @@ export function templateToTypescript(
 
         case 'bind-invokable':
           record.error(
-            `The {{${formInfo.name}}} helper can't be used directly in block form under Glint. ` +
+              `The {{${formInfo.name}}} helper can't be used directly in block form under Glint. ` +
               `Consider first binding the result to a variable, e.g. '{{#let (${formInfo.name} ...) as |...|}}' ` +
               `and then using the bound value.`,
-            rangeForNode(node.path)
+              rangeForNode(node.path)
           );
           break;
 
@@ -975,8 +980,8 @@ export function templateToTypescript(
     function emitIfStatement(formInfo: SpecialFormInfo, node: AST.BlockStatement): void {
       emit.forNode(node, () => {
         assert(
-          node.params.length === 1,
-          () => `{{#${formInfo.name}}} requires exactly one condition`
+            node.params.length === 1,
+            () => `{{#${formInfo.name}}} requires exactly one condition`
         );
 
         emit.text('if (');
@@ -1009,8 +1014,8 @@ export function templateToTypescript(
     function emitUnlessStatement(formInfo: SpecialFormInfo, node: AST.BlockStatement): void {
       emit.forNode(node, () => {
         assert(
-          node.params.length === 1,
-          () => `{{#${formInfo.name}}} requires exactly one condition`
+            node.params.length === 1,
+            () => `{{#${formInfo.name}}} requires exactly one condition`
         );
 
         emit.text('if (!(');
@@ -1082,23 +1087,23 @@ export function templateToTypescript(
 
     function emitBlock(name: string, node: AST.Block): void {
       let paramsStart = template.lastIndexOf(
-        '|',
-        template.lastIndexOf('|', rangeForNode(node).start) - 1
+          '|',
+          template.lastIndexOf('|', rangeForNode(node).start) - 1
       );
 
       emitBlockContents(name, undefined, node.blockParams, paramsStart, node.body);
     }
 
     function emitBlockContents(
-      name: string,
-      nameOffset: number | undefined,
-      blockParams: string[],
-      blockParamsOffset: number,
-      children: AST.TopLevelStatement[]
+        name: string,
+        nameOffset: number | undefined,
+        blockParams: string[],
+        blockParamsOffset: number,
+        children: AST.TopLevelStatement[]
     ): void {
       assert(
-        blockParams.every((name) => !name.includes('-')),
-        'Block params must be valid TypeScript identifiers'
+          blockParams.every((name) => !name.includes('-')),
+          'Block params must be valid TypeScript identifiers'
       );
 
       scope.push(blockParams);
@@ -1146,10 +1151,10 @@ export function templateToTypescript(
 
     /** An AST node that represents an invocation of some template entity in curlies */
     type CurlyInvocationNode =
-      | AST.MustacheStatement
-      | AST.SubExpression
-      | AST.BlockStatement
-      | AST.ElementModifierStatement;
+        | AST.MustacheStatement
+        | AST.SubExpression
+        | AST.BlockStatement
+        | AST.ElementModifierStatement;
 
     function emitResolve(node: CurlyInvocationNode, resolveType: string): void {
       emit.text('χ.');
@@ -1248,8 +1253,8 @@ export function templateToTypescript(
     };
 
     function emitPropertyAccesss(
-      name: string,
-      { offset, optional, synthetic }: PropertyAccessOptions = {}
+        name: string,
+        { offset, optional, synthetic }: PropertyAccessOptions = {}
     ): void {
       // Synthetic accesses should always use `[]` notation to avoid incidentally triggering
       // `noPropertyAccessFromIndexSignature`. Emitting `{{foo.bar}}` property accesses, however,
@@ -1288,7 +1293,7 @@ export function templateToTypescript(
 
     function emitLiteral(node: AST.Literal): void {
       emit.forNode(node, () =>
-        emit.text(node.value === undefined ? 'undefined' : JSON.stringify(node.value))
+          emit.text(node.value === undefined ? 'undefined' : JSON.stringify(node.value))
       );
     }
 
