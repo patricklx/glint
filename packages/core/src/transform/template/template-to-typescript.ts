@@ -601,38 +601,38 @@ export function templateToTypescript(
         emit.text(')(');
 
         let dataAttrs = node.attributes.filter(({ name }) => name.startsWith('@'));
-        emit.text('{ ');
+        if (dataAttrs.length) {
+          emit.text('{ ');
 
-        emit.forNode(node.startTag, () => {
-          for (let attr of dataAttrs) {
-            emit.forNode(attr, () => {
-              start = template.indexOf(attr.name, start + 1);
-              emitHashKey(attr.name.slice(1), start + 1);
-              emit.text(': ');
+          emit.forNode(node.startTag, () => {
+            for (let attr of dataAttrs) {
+              emit.forNode(attr, () => {
+                start = template.indexOf(attr.name, start + 1);
+                emitHashKey(attr.name.slice(1), start + 1);
+                emit.text(': ');
 
-              switch (attr.value.type) {
-                case 'TextNode':
-                  emit.text(JSON.stringify(attr.value.chars));
-                  break;
-                case 'ConcatStatement':
-                  emitConcatStatement(attr.value);
-                  break;
-                case 'MustacheStatement':
-                  emitMustacheStatement(attr.value, 'arg');
-                  break;
-                default:
-                  unreachable(attr.value);
-              }
-            });
+                switch (attr.value.type) {
+                  case 'TextNode':
+                    emit.text(JSON.stringify(attr.value.chars));
+                    break;
+                  case 'ConcatStatement':
+                    emitConcatStatement(attr.value);
+                    break;
+                  case 'MustacheStatement':
+                    emitMustacheStatement(attr.value, 'arg');
+                    break;
+                  default:
+                    unreachable(attr.value);
+                }
+              });
 
-            start = rangeForNode(attr.value).end;
-            emit.text(', ');
-          }
-          // in case there are no attributes, this would allow completions to trigger
-          emit.text(' ');
-        });
+              start = rangeForNode(attr.value).end;
+              emit.text(', ');
+            }
 
-        emit.text('...χ.NamedArgsMarker }');
+            emit.text('...χ.NamedArgsMarker }');
+          });
+        }
 
         emit.text('));');
         emit.newline();
