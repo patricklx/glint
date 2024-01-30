@@ -1,4 +1,5 @@
-import { SafeString } from '@glimmer/runtime';
+// @ts-ignore
+import type { SafeString } from '@glimmer/runtime';
 import { htmlSafe } from '@ember/template';
 import { emitContent } from '../-private/dsl';
 
