@@ -180,7 +180,12 @@ function checkResolveError(
   // Otherwise if this is on a top level invocation, we're trying to use a template-unaware
   // value in a template-specific way.
   let nodeType = sourceMapping?.sourceNode.type;
-  if (nodeType === 'ElementNode' || nodeType === 'PathExpression' || nodeType === 'Identifier' || nodeType === 'ElementNameNode') {
+  if (
+    nodeType === 'ElementNode' ||
+    nodeType === 'PathExpression' ||
+    nodeType === 'Identifier' ||
+    nodeType === 'ElementNameNode'
+  ) {
     return addGlintDetails(
       diagnostic,
       'The given value does not appear to be usable as a component, modifier or helper.'
