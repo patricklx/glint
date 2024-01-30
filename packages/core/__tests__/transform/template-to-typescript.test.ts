@@ -758,7 +758,7 @@ describe('Transform: rewriteTemplate', () => {
               const 𝛄 = χ.emitComponent(χ.resolve(Foo)());
               χ.applyAttributes(𝛄.element, {
                 \\"data-bar\\": χ.resolve(helper)({ param: true , ...χ.NamedArgsMarker }),
-                 });
+              });
             }"
           `);
         });
@@ -792,7 +792,7 @@ describe('Transform: rewriteTemplate', () => {
               const 𝛄 = χ.emitElement(\\"div\\");
               χ.applyAttributes(𝛄.element, {
                 \\"data-attr\\": χ.resolveOrReturn(𝚪.args.input)(),
-                 });
+              });
             }"
           `);
         });
@@ -805,7 +805,7 @@ describe('Transform: rewriteTemplate', () => {
               const 𝛄 = χ.emitElement(\\"div\\");
               χ.applyAttributes(𝛄.element, {
                 \\"data-attr\\": \`\${χ.resolveOrReturn(𝚪.args.input)()}\`,
-                 });
+              });
             }"
           `);
         });
@@ -934,7 +934,8 @@ describe('Transform: rewriteTemplate', () => {
         "{
           const 𝛄 = χ.emitElement(\\"div\\");
           χ.applyAttributes(𝛄.element, {
-             });
+             
+          });
           χ.applyModifier(χ.resolve(modifier)(𝛄.element, { foo: \\"bar\\" , ...χ.NamedArgsMarker }));
         }"
       `);
@@ -947,7 +948,8 @@ describe('Transform: rewriteTemplate', () => {
         "{
           const 𝛄 = χ.emitComponent(χ.resolve(MyComponent)());
           χ.applyAttributes(𝛄.element, {
-             });
+             
+          });
           χ.applyModifier(χ.resolve(modifier)(𝛄.element, { foo: \\"bar\\" , ...χ.NamedArgsMarker }));
         }"
       `);
@@ -963,7 +965,7 @@ describe('Transform: rewriteTemplate', () => {
           const 𝛄 = χ.emitElement(\\"div\\");
           χ.applyAttributes(𝛄.element, {
             \\"data-attr\\": χ.resolve(concat)(χ.resolve(foo)(1), χ.resolve(foo)(true)),
-             });
+          });
         }"
       `);
     });
@@ -1064,7 +1066,7 @@ describe('Transform: rewriteTemplate', () => {
           const 𝛄 = χ.emitElement(\\"div\\");
           χ.applyAttributes(𝛄.element, {
             \\"data-foo\\": χ.resolveOrReturn(𝚪.args.foo)(),
-             });
+          });
         }"
       `);
     });
@@ -1077,7 +1079,7 @@ describe('Transform: rewriteTemplate', () => {
           const 𝛄 = χ.emitElement(\\"div\\");
           χ.applyAttributes(𝛄.element, {
             \\"data-foo\\": \`\${χ.resolveOrReturn(𝚪.args.foo)()}\${χ.resolveOrReturn(𝚪.args.bar)()}\`,
-             });
+          });
         }"
       `);
     });
@@ -1090,7 +1092,8 @@ describe('Transform: rewriteTemplate', () => {
           const 𝛄 = χ.emitElement(\\"div\\");
           χ.applySplattributes(𝚪.element, 𝛄.element);
           χ.applyAttributes(𝛄.element, {
-             });
+             
+          });
         }"
       `);
     });
@@ -1136,7 +1139,8 @@ describe('Transform: rewriteTemplate', () => {
           const 𝛄 = χ.emitComponent(χ.resolve(Foo)());
           χ.applySplattributes(𝚪.element, 𝛄.element);
           χ.applyAttributes(𝛄.element, {
-             });
+             
+          });
         }"
       `);
     });
@@ -1261,7 +1265,7 @@ describe('Transform: rewriteTemplate', () => {
               const 𝛄 = χ.emitComponent(χ.resolve(NS?.Nested?.Custom)());
               χ.applyAttributes(𝛄.element, {
                 class: \\"foo\\",
-                 });
+              });
             }
           }
           χ.Globals[\\"Foo\\"];

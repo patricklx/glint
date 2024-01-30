@@ -826,7 +826,10 @@ export function templateToTypescript(
           });
         }
         // in case there are no attributes, this would allow completions to trigger
-        emit.text(' ');
+        if (attributes.length === 0) {
+          emit.text(' ');
+          emit.newline();
+        }
         emit.dedent();
       });
       emit.text('});');
